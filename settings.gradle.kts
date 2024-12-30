@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "HabitLoop"
+rootProject.name = "Habit Loop"
 include(":app")
