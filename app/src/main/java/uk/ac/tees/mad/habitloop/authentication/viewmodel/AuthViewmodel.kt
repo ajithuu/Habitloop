@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.habitloop.authentication.viewmodel
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -148,33 +149,33 @@ class AuthViewmodel @Inject constructor(
         }
     }
 
-//    fun updateProfileImage(uri: Uri){
-//        val currentUser = auth.currentUser
-//        if (currentUser!=null){
-//            val userId = currentUser.uid
-//            val imageRef = storage.reference.child("users/${userId}/profile.jpg")
-//
-//            imageRef.putFile(uri)
-//                .addOnSuccessListener {
-//                    imageRef.downloadUrl.addOnSuccessListener {
-//                        val imageLink = it.toString()
-//
-//                        val userData = hashMapOf(
-//                            "profilePicture" to imageLink)
-//                        firestore.collection("users")
-//                            .document(userId)
-//                            .update(userData as Map<String, Any>)
-//                            .addOnSuccessListener {
-//                                fetchCurrentUser()
-//                            }
-//                        Log.i("The profile picture: ", "The picture is updated successfully.")
-//                    }
-//                }
-//                .addOnFailureListener{
-//                    Log.i("Error Encountered: ", "Unable to update the profile picture. ${it}")
-//                }
-//        }else{
-//            Log.i("Error update:", "Current User is null")
-//        }
-//    }
+    fun updateProfileImage(uri: Uri){
+        val currentUser = auth.currentUser
+        if (currentUser!=null){
+            val userId = currentUser.uid
+            val imageRef = storage.reference.child("users/${userId}/profile.jpg")
+
+            imageRef.putFile(uri)
+                .addOnSuccessListener {
+                    imageRef.downloadUrl.addOnSuccessListener {
+                        val imageLink = it.toString()
+
+                        val userData = hashMapOf(
+                            "profilePicture" to imageLink)
+                        firestore.collection("users")
+                            .document(userId)
+                            .update(userData as Map<String, Any>)
+                            .addOnSuccessListener {
+                                fetchCurrentUser()
+                            }
+                        Log.i("The profile picture: ", "The picture is updated successfully.")
+                    }
+                }
+                .addOnFailureListener{
+                    Log.i("Error Encountered: ", "Unable to update the profile picture. ${it}")
+                }
+        }else{
+            Log.i("Error update:", "Current User is null")
+        }
+    }
 }
