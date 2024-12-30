@@ -1,11 +1,14 @@
 package uk.ac.tees.mad.habitloop.ui.mainapp
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,17 +18,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import uk.ac.tees.mad.habitloop.mainapp.model.HabitInfo
+import uk.ac.tees.mad.habitloop.mainapp.viewmodel.HabitViewmodel
 import uk.ac.tees.mad.habitloop.ui.theme.metamorphousFamily
 import uk.ac.tees.mad.habitloop.ui.theme.poppinsFamily
 
 
 @Composable
 fun AddNewHabitScreen(
+    habitViewmodel: HabitViewmodel,
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
 
@@ -102,6 +112,34 @@ fun AddNewHabitScreen(
             },
             shape = RoundedCornerShape(15.dp)
         )
+
+        Spacer(modifier.weight(1f))
+
+        Button(
+            modifier = modifier
+                .fillMaxWidth(0.8f),
+            border = BorderStroke(width = 1.dp, color = Color.Black),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF9EB1F4),
+                contentColor = Color.Black
+            ),
+            elevation = ButtonDefaults.elevatedButtonElevation(10.dp),
+            onClick = {
+                val habit = HabitInfo(
+                    name = name,
+                    goal = goal,
+                    schedule = schedule
+                )
+                habitViewmodel.addNewHabit(habit = habit)
+                navController.popBackStack()
+            }
+        ) {
+            Text(
+                text = "Create Habit!!",
+                fontSize = 18.sp,
+                fontFamily = poppinsFamily
+            )
+        }
 
         Spacer(modifier.weight(10f))
     }

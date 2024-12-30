@@ -2,12 +2,18 @@ package uk.ac.tees.mad.habitloop.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.google.gson.Gson
 import uk.ac.tees.mad.habitloop.authentication.viewmodel.AuthViewmodel
+import uk.ac.tees.mad.habitloop.mainapp.model.HabitInfo
+import uk.ac.tees.mad.habitloop.mainapp.viewmodel.HabitViewmodel
 import uk.ac.tees.mad.habitloop.ui.mainapp.AddNewHabitScreen
 import uk.ac.tees.mad.habitloop.ui.mainapp.EditProfileScreen
+import uk.ac.tees.mad.habitloop.ui.mainapp.HabitDetailsScreen
 import uk.ac.tees.mad.habitloop.ui.mainapp.HomeScreen
 import uk.ac.tees.mad.habitloop.ui.mainapp.ProfileScreen
 import uk.ac.tees.mad.rd.ui.authentication.LogInScreen
@@ -18,7 +24,8 @@ import uk.ac.tees.mad.rd.ui.authentication.SplashScreen
 @Composable
 fun CentralNavigation(
     navController: NavHostController,
-    authViewmodel: AuthViewmodel
+    authViewmodel: AuthViewmodel,
+    habitViewmodel: HabitViewmodel
 ){
     NavHost(
         navController = navController,
@@ -63,7 +70,8 @@ fun CentralNavigation(
             composable("home_screen") {
                 HomeScreen(
                     navController,
-                    authViewmodel
+                    authViewmodel,
+                    habitViewmodel
                 )
             }
 
@@ -76,7 +84,16 @@ fun CentralNavigation(
             }
 
             composable("add_new_habit") {
-                AddNewHabitScreen()
+                AddNewHabitScreen(habitViewmodel, navController)
+            }
+
+            composable(
+                "habit_details_screen/{habits}",
+                arguments = listOf(navArgument("habits"){type = NavType.StringType})
+            ) {backStack->
+                val habitJson = backStack.arguments?.getString("habits")
+                val habitInfo = Gson().fromJson(habitJson, HabitInfo::class.java)
+                HabitDetailsScreen(habit = habitInfo)
             }
 
         }

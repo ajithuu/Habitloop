@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import uk.ac.tees.mad.habitloop.authentication.viewmodel.AuthViewmodel
+import uk.ac.tees.mad.habitloop.mainapp.viewmodel.HabitViewmodel
 import uk.ac.tees.mad.habitloop.navigation.CentralNavigation
 import uk.ac.tees.mad.habitloop.ui.theme.HabitLoopTheme
 
@@ -23,6 +24,7 @@ import uk.ac.tees.mad.habitloop.ui.theme.HabitLoopTheme
 class MainActivity : ComponentActivity() {
 
     private val authViewmodel by viewModels<AuthViewmodel>()
+    private val habitViewmodel by viewModels<HabitViewmodel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +36,8 @@ class MainActivity : ComponentActivity() {
             HabitLoopTheme {
                 CentralNavigation(
                     navController = navController,
-                    authViewmodel = authViewmodel
+                    authViewmodel = authViewmodel,
+                    habitViewmodel = habitViewmodel
                 )
             }
         }
