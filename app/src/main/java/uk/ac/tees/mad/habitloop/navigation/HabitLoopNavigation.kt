@@ -16,7 +16,11 @@ fun HabitLoopNavigation() {
         startDestination = Screen.Splash.route
     ) {
         composable(Screen.Splash.route) {
-            Splash()
+            Splash(onNavigateToLogin = {
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(Screen.Splash.route) { inclusive = true }
+                }
+            })
         }
 
         composable(Screen.Login.route) {
