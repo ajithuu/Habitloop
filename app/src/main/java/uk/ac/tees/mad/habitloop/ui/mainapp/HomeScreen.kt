@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -134,14 +136,25 @@ fun HabitTile(
             navController.navigate("habit_details_screen/$habitJson")
         }
     ) {
-        Text(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp, vertical = 5.dp),
-            text = habit.name,
-            fontSize = 18.sp,
-            fontFamily = poppinsFamily,
-            fontWeight = FontWeight.Bold
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ){
+
+            Checkbox(
+                checked = habit.completed,
+                onCheckedChange = {
+
+                }
+            )
+            Text(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp, vertical = 5.dp),
+                text = habit.name,
+                fontSize = 18.sp,
+                fontFamily = poppinsFamily,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }

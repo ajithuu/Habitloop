@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     id("kotlin-kapt")
+    id("androidx.room")
     id("com.google.dagger.hilt.android")
 }
 
@@ -21,6 +22,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+    }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 
     buildTypes {
@@ -100,4 +105,10 @@ dependencies {
 
     //Glide Implementation
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+
+    //Room Implementation
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.5.1")
+
 }
