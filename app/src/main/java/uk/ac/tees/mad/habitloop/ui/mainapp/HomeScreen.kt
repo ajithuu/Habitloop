@@ -66,7 +66,7 @@ fun HomeScreen(
                 containerColor = Color(0xFF94bbe9),
                 shape = CircleShape,
                 onClick = {
-
+                    navController.navigate("add_new_habit")
                 }
             ) {
                 Icon(

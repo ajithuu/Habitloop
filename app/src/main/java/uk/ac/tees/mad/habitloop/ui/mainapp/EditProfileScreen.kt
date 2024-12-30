@@ -79,7 +79,7 @@ fun EditProfileScreen(
         contract = ActivityResultContracts.GetContent()
     ) {uri: Uri? ->
         uri?.let {
-//            authViewmodel.updateProfileImage(uri)
+            authViewmodel.updateProfileImage(uri)
         }
     }
 
@@ -88,7 +88,7 @@ fun EditProfileScreen(
         contract = ActivityResultContracts.TakePicturePreview()
     ) { bitmap: Bitmap? ->
         bitmap?.let {
-//            authViewmodel.updateProfileImage(bitmapToUri(context, bitmap))
+            authViewmodel.updateProfileImage(bitmapToUri(context, bitmap))
         }
     }
 

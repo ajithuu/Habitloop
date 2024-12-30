@@ -3,6 +3,7 @@ package uk.ac.tees.mad.habitloop.Module
 import com.google.android.gms.auth.api.phone.SmsCodeAutofillClient.PermissionState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +27,10 @@ object DiModule {
         return FirebaseFirestore.getInstance()
     }
 
-
+    @Provides
+    @Singleton
+    fun provideFirebaseStorage(): FirebaseStorage{
+        return FirebaseStorage.getInstance()
+    }
 
 }

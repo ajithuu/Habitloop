@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import uk.ac.tees.mad.habitloop.authentication.viewmodel.AuthViewmodel
+import uk.ac.tees.mad.habitloop.ui.mainapp.AddNewHabitScreen
 import uk.ac.tees.mad.habitloop.ui.mainapp.EditProfileScreen
 import uk.ac.tees.mad.habitloop.ui.mainapp.HomeScreen
 import uk.ac.tees.mad.habitloop.ui.mainapp.ProfileScreen
@@ -72,6 +73,10 @@ fun CentralNavigation(
 
             composable("edit_profile_screen"){
                 EditProfileScreen(authViewmodel, navController)
+            }
+
+            composable("add_new_habit") {
+                AddNewHabitScreen()
             }
 
         }
