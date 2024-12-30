@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import uk.ac.tees.mad.habitloop.mainapp.model.HabitDocument
 import uk.ac.tees.mad.habitloop.mainapp.model.HabitInfo
 import uk.ac.tees.mad.habitloop.room.HabitDatabase
 import javax.inject.Inject
@@ -29,6 +30,8 @@ class HabitViewmodel @Inject constructor(
         "habit.db"
     ).build()
 
+    private val habit = habitDb.habitDao()
+
     private val _allHabits = MutableStateFlow<List<HabitInfo?>>(emptyList())
     val allHabits = _allHabits.asStateFlow()
 
@@ -45,10 +48,14 @@ class HabitViewmodel @Inject constructor(
                 firestore.collection("habits")
                     .document(userId)
                     .get()
-                    .addOnSuccessListener {
-                        val fetchedHabit = listOf(it.toObject(HabitInfo::class.java))
-                        _allHabits.value = fetchedHabit
-                        Log.i("The response: ", "The list is $fetchedHabit")
+                    .addOnSuccessListener { documentSnapshot ->
+                        if (documentSnapshot.exists()) {
+                            val habitList = documentSnapshot.toObject(HabitDocument::class.java)?.habits ?: emptyList()
+                            _allHabits.value = habitList
+                            Log.i("The response: ", "The list is $documentSnapshot")
+                        } else {
+                            Log.i("The response: ", "No such document")
+                        }
                     }
                     .addOnFailureListener {
                         Log.i("The response: ", "The error is $it")
@@ -67,7 +74,7 @@ class HabitViewmodel @Inject constructor(
 
                 val updatedList = _allHabits.value + habit
 
-                val habitData = mapOf("habit data: " to updatedList)
+                val habitData = mapOf("habits: " to updatedList)
 
                 val userId = currUser.uid
                 firestore.collection("habits")
@@ -84,6 +91,5 @@ class HabitViewmodel @Inject constructor(
             }
         }
     }
-
 
 }
