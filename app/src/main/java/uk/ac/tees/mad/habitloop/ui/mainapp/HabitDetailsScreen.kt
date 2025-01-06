@@ -19,12 +19,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import uk.ac.tees.mad.habitloop.mainapp.model.HabitInfo
+import uk.ac.tees.mad.habitloop.mainapp.viewmodel.HabitViewmodel
 import uk.ac.tees.mad.habitloop.ui.theme.poppinsFamily
 
 @Composable
 fun HabitDetailsScreen(
     habit: HabitInfo,
+    habitViewmodel: HabitViewmodel,
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     Column (
@@ -105,7 +110,8 @@ fun HabitDetailsScreen(
                 contentColor = Color.Black
             ),
             onClick = {
-
+                habitViewmodel.deleteHabit(habit)
+                navController.popBackStack()
             }
         ) {
             Text(

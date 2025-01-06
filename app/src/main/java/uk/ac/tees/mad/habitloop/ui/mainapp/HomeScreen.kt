@@ -2,6 +2,7 @@ package uk.ac.tees.mad.habitloop.ui.mainapp
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,12 +35,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.gson.Gson
 import uk.ac.tees.mad.habitloop.authentication.viewmodel.AuthViewmodel
+import uk.ac.tees.mad.habitloop.mainapp.model.FirebaseResponse
 import uk.ac.tees.mad.habitloop.mainapp.model.HabitInfo
 import uk.ac.tees.mad.habitloop.mainapp.viewmodel.HabitViewmodel
 import uk.ac.tees.mad.habitloop.ui.theme.metamorphousFamily
@@ -52,11 +55,19 @@ fun HomeScreen(
     navController: NavHostController,
     authViewmodel: AuthViewmodel,
     habitViewmodel: HabitViewmodel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-
+    val state = habitViewmodel.authState
+    val context = LocalContext.current
     val allHabits by habitViewmodel.allHabits.collectAsState()
-
+    LaunchedEffect(state) {
+        if (state.value is FirebaseResponse.Success) {
+//            navController.popBackStack()
+        } else if (state.value is FirebaseResponse.Failure) {
+            val message = (state.value as FirebaseResponse.Failure).message
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
     LaunchedEffect(Unit) {
         habitViewmodel.getAllHabits()
     }
@@ -103,7 +114,7 @@ fun HomeScreen(
                 )
             }
         }
-    ){innerpadding->
+    ) { innerpadding ->
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -113,9 +124,9 @@ fun HomeScreen(
         ) {
             LazyColumn {
                 Log.i("Home Screen", "The list $allHabits")
-                items(allHabits){habit->
+                items(allHabits) { habit ->
                     if (habit != null) {
-                        HabitTile(habit, navController)
+                        HabitTile(habit, navController, habitViewmodel)
                     }
                 }
             }
@@ -128,7 +139,8 @@ fun HomeScreen(
 fun HabitTile(
     habit: HabitInfo,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    habitViewmodel: HabitViewmodel,
+    modifier: Modifier = Modifier,
 ) {
 
     var done by remember { mutableStateOf(habit.completed) }
@@ -143,12 +155,15 @@ fun HabitTile(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
 
             Checkbox(
                 checked = done,
                 onCheckedChange = {
                     done = !done
+                    habitViewmodel.toggleHabitCompletion(
+                        habit = habit
+                    )
                 }
             )
             Text(

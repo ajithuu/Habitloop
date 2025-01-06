@@ -1,5 +1,6 @@
 package uk.ac.tees.mad.habitloop.ui.mainapp
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import uk.ac.tees.mad.habitloop.mainapp.model.FirebaseResponse
 import uk.ac.tees.mad.habitloop.mainapp.model.HabitInfo
 import uk.ac.tees.mad.habitloop.mainapp.viewmodel.HabitViewmodel
 import uk.ac.tees.mad.habitloop.ui.theme.metamorphousFamily
@@ -36,19 +40,28 @@ import uk.ac.tees.mad.habitloop.ui.theme.poppinsFamily
 fun AddNewHabitScreen(
     habitViewmodel: HabitViewmodel,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-
+    val state = habitViewmodel.authState
     var name by remember { mutableStateOf("") }
     var goal by remember { mutableStateOf("") }
     var schedule by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
-    Column (
+    LaunchedEffect(state) {
+        if (state.value is FirebaseResponse.Success) {
+//            navController.popBackStack()
+        } else if (state.value is FirebaseResponse.Failure) {
+            val message = (state.value as FirebaseResponse.Failure).message
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+    }
+    Column(
         modifier = modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ){
+    ) {
         Spacer(modifier.weight(2f))
         Text(
             modifier = modifier.fillMaxWidth(),
@@ -131,7 +144,6 @@ fun AddNewHabitScreen(
                     schedule = schedule
                 )
                 habitViewmodel.addNewHabit(habit = habit)
-                navController.popBackStack()
             }
         ) {
             Text(

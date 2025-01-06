@@ -85,12 +85,14 @@ class AuthViewmodel @Inject constructor(
                                     Log.i("Registration User: ", "The user registered successfully")
                                 }
                                 .addOnFailureListener {
+                                    it.printStackTrace()
                                     Log.i("Register User: ", "The user is not registered.")
                                 }
                         }
                     }
                     .addOnFailureListener {
                         _authState.value = AuthResponse.Failure("Failed to create new User in auth.")
+                        it.printStackTrace()
                     }
             }catch (e: Exception){
                 _authState.value = AuthResponse.Failure("Can't register the user ${e.message.toString()}")

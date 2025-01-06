@@ -34,7 +34,7 @@ fun SplashScreen(
 
     val isLoggedIn by authViewmodel.isLoggedIn.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(isLoggedIn) {
         delay(2000L)
 
         if(isLoggedIn){

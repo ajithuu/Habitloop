@@ -81,7 +81,6 @@ fun SignUpScreen(
 
         is AuthResponse.Failure -> {
             Toast.makeText(LocalContext.current, "Can't Register: ${(authState as AuthResponse.Failure).message}", Toast.LENGTH_SHORT).show()
-            password = ""
             passwordVisi = false
         }
         AuthResponse.Idle -> {

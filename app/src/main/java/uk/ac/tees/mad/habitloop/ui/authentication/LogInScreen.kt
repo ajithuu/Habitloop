@@ -65,9 +65,6 @@ fun LogInScreen(
 
         is AuthResponse.Failure -> {
             Toast.makeText(LocalContext.current, "Can't login: ${(authState as AuthResponse.Failure).message}", Toast.LENGTH_SHORT).show()
-            email = ""
-            password = ""
-            passwordVisi = false
         }
         AuthResponse.Idle -> {
 
@@ -201,12 +198,6 @@ fun LogInScreen(
             ),
             onClick = {
                 authViewmodel.LoginUser(email, password)
-                navController.navigate("home_graph"){
-                    popUpTo(navController.graph.startDestinationId){
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
             },
             shape = RoundedCornerShape(15.dp)
         ) {

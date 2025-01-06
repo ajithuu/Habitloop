@@ -93,7 +93,11 @@ fun CentralNavigation(
             ) {backStack->
                 val habitJson = backStack.arguments?.getString("habits")
                 val habitInfo = Gson().fromJson(habitJson, HabitInfo::class.java)
-                HabitDetailsScreen(habit = habitInfo)
+                HabitDetailsScreen(
+                    habit = habitInfo,
+                    habitViewmodel = habitViewmodel,
+                    navController = navController
+                )
             }
 
         }
